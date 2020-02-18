@@ -1,0 +1,17 @@
+{
+    "name": "Orbit",
+    "version": "0.0.1",
+    "description": "Microsoft MakeCode package for 4tronix Orbit RGB Sphere",
+    "license": "MIT",
+    "dependencies": {
+        "core": "*",
+        "fireled": "github:4tronix/FireLedsBase#0.1.2"
+    },
+    "files": [
+        "README.md",
+        "orbit.ts"
+    ],
+    "testFiles": [],
+    "yotta": {},
+    "public": true
+}
