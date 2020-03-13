@@ -10,10 +10,23 @@ enum ledMode
     Auto
 }
 
+enum LatLong
+{
+    Latitude,
+    Longitude
+}
+
+enum MoveDirection
+{
+    Forward,
+    Reverse
+}
+
+
 /**
  * Custom blocks
  */
-//% weight=50 color=#e7660b icon="\uf0ac"
+//% weight=50 color=#e7660b icon="\uf021"
 //% groups='["Bluetooth","Basic","Advanced"]'
 namespace orbit
 {
@@ -26,21 +39,6 @@ namespace orbit
     function clamp(value: number, min: number, max: number): number
     {
         return Math.max(Math.min(max, value), min);
-    }
-
-// Block to enable Bluetooth and disable FireLeds.
-    /**
-      * Enable/Disable Bluetooth support by disabling/enabling FireLeds
-      * @param enable enable or disable Blueetoth
-    */
-    //% blockId="EnableBluetooth"
-    //% block="enable Bluetooth & disable FireLeds%enable"
-    //% enable.shadow="toggleYesNo"
-    //% weight=100
-    //% blockGap=8
-    export function enableBluetooth(enable: boolean)
-    {
-        btEnabled = enable;
     }
 
 // Generic FireLed Blocks
@@ -70,7 +68,8 @@ namespace orbit
       */
     //% blockId="SetLedColor" block="set all LEDs to%rgb=FireColours"
     //% subcategory=Generic
-    //% weight=80
+    //% group=Basic
+    //% weight=100
     //% blockGap=8
     export function setLedColor(rgb: number)
     {
@@ -83,7 +82,8 @@ namespace orbit
       */
     //% blockId="LedClear" block="clear all LEDs"
     //% subcategory=Generic
-    //% weight=70
+    //% group=Basic
+    //% weight=90
     //% blockGap=8
     export function ledClear()
     {
@@ -91,62 +91,23 @@ namespace orbit
         updateLEDs();
     }
 
-    /**
-     * Set single LED to a given color (range 0-255 for r, g, b).
-     *
-     * @param ledId position of the LED (0 to 11)
-     * @param rgb RGB color of the LED
-     */
-    //% blockId="SetPixelColor" block="set LED at%ledId|to%rgb=FireColours"
-    //% subcategory=SingleString
-    //% weight=60
-    //% blockGap=8
-    export function setPixelColor(ledId: number, rgb: number)
-    {
-        fire().setPixel(ledId, rgb);
-        updateLEDs();
-    }
-
-    /**
-      * Shows a rainbow pattern on all LEDs.
-      */
-    //% blockId="LedRainbow" block="set LED rainbow"
-    //% subcategory=SingleString
-    //% weight=50
-    //% blockGap=8
-    export function ledRainbow()
-    {
-        fire().setRainbow();
-        updateLEDs()
-    }
-
-    /**
-     * Shift LEDs forward and clear with zeros.
-     */
-    //% blockId="LedShift" block="shift LEDs"
-    //% subcategory=SingleString
-    //% weight=40
-    //% blockGap=8
-    export function ledShift()
-    {
-        fire().shiftBand();
-        updateLEDs()
-    }
-
-    /**
-     * Rotate LEDs forward.
-     */
-    //% blockId="LedRotate" block="rotate LEDs"
-    //% subcategory=SingleString
-    //% weight=30
-    //% blockGap=8
-    export function ledRotate()
-    {
-        fire().rotateBand();
-        updateLEDs()
-    }
-
 // Advanced generic blocks
+
+    /**
+      * Enable/Disable Bluetooth support by disabling/enabling FireLeds
+      * @param enable enable or disable Blueetoth
+    */
+    //% blockId="EnableBluetooth"
+    //% block="enable Bluetooth & disable FireLeds%enable"
+    //% enable.shadow="toggleYesNo"
+    //% subcategory=Generic
+    //% group=Advanced
+    //% weight=100
+    //% blockGap=8
+    export function enableBluetooth(enable: boolean)
+    {
+        btEnabled = enable;
+    }
 
     /**
      * Set the brightness of the FireLed band
@@ -154,9 +115,9 @@ namespace orbit
      */
     //% blockId="LedBrightness" block="set LED brightness%brightness"
     //% subcategory=Generic
-    //% advanced=true
+    //% group=Advanced
     //% brightness.min=0 brightness.max=255
-    //% weight=100
+    //% weight=90
     //% blockGap=8
     export function ledBrightness(brightness: number)
     {
@@ -170,8 +131,8 @@ namespace orbit
       */
     //% blockId="SetUpdateMode" block="set%mode|update mode"
     //% subcategory=Generic
-    //% advanced=true
-    //% weight=90
+    //% group=Advanced
+    //% weight=80
     //% blockGap=8
     export function setUpdateMode(mode: ledMode)
     {
@@ -183,8 +144,8 @@ namespace orbit
       */
     //% blockId="LedShow" block="show LED changes"
     //% subcategory=Generic
-    //% advanced=true
-    //% weight=80
+    //% group=Advanced
+    //% weight=70
     //% blockGap=8
     export function ledShow(): void
     {
@@ -198,9 +159,9 @@ namespace orbit
       */
     //% blockId="FireColours" block=%colour
     //% subcategory=Generic
-    //% advanced=true
+    //% group=Advanced
     //% blockHidden=false
-    //% weight=70
+    //% weight=60
     //% blockGap=8
     //% shim=TD_ID colorSecondary="#e7660b"
     //% colour.fieldEditor="colornumber"
@@ -222,12 +183,425 @@ namespace orbit
       */
     //% blockId="ConvertRGB" block="convert from red%red|green%green|blue%blue"
     //% subcategory=Generic
-    //% advanced=true
-    //% weight=60
+    //% group=Advanced
+    //% weight=50
     //% blockGap=8
     export function convertRGB(r: number, g: number, b: number): number
     {
         return ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF);
+    }
+
+// Treat LEDs as Single String
+    /**
+     * Set single LED to a given color (range 0-255 for r, g, b).
+     * @param ledId position of the LED (0 to 11)
+     * @param rgb RGB color of the LED
+     */
+    //% blockId="SetPixelColor" block="set LED at%ledId|to%rgb=FireColours"
+    //% subcategory=SingleString
+    //% weight=100
+    //% blockGap=8
+    export function setPixelColor(ledId: number, rgb: number)
+    {
+        fire().setPixel(ledId, rgb);
+        updateLEDs();
+    }
+
+    /**
+      * Shows a rainbow pattern on all LEDs.
+      */
+    //% blockId="LedRainbow" block="set LED rainbow"
+    //% subcategory=SingleString
+    //% weight=90
+    //% blockGap=8
+    export function ledRainbow()
+    {
+        fire().setRainbow();
+        updateLEDs()
+    }
+
+    /**
+     * Shift LEDs forward and clear with zeros.
+     */
+    //% blockId="LedShift" block="shift LEDs"
+    //% subcategory=SingleString
+    //% weight=80
+    //% blockGap=8
+    export function ledShift()
+    {
+        fire().shiftBand();
+        updateLEDs()
+    }
+
+    /**
+     * Rotate LEDs forward.
+     */
+    //% blockId="LedRotate" block="rotate LEDs"
+    //% subcategory=SingleString
+    //% weight=70
+    //% blockGap=8
+    export function ledRotate()
+    {
+        fire().rotateBand();
+        updateLEDs()
+    }
+
+// LatLong Addressing. 
+    /**
+     * Set single LED to a given color (range 0-255 for r, g, b).
+     * @param latitude latitudinal value 0-15
+     * @param longitude longitudinal value 0-15
+     * @param rgb RGB color of the LED
+     */
+    //% blockId="SetLLPixelColor" block="set LED at lat%latitude|long%longitude|to%rgb=FireColours"
+    //% subcategory="Latitude Longitude"
+    //% weight=100
+    //% blockGap=8
+    export function setLLPixelColor(latitude: number, longitude: number, rgb: number)
+    {
+        latitude = clamp(latitude, 0, 15);
+        longitude = clamp(longitude, 0, 15);
+        fire().setPixel(longitude*16+latitude, rgb);
+        updateLEDs();
+    }
+
+    /** put pixel at address lat/long (ignores brightness setting
+     * @param latitude latitudinal value 0-15
+     * @param longitude longitudinal value 0-15
+     * @param rgb RGB color of the LED
+     */
+    //% blockId="putPixel" block="put LED at lat%latitude|long%longitude|to%rgb=FireColours"
+    //% subcategory="Latitude Longitude"
+    //% weight=95
+    //% blockGap=8
+    export function putPixel(latitude: number, longitude: number, rgb: number)
+    {
+        latitude = clamp(latitude, 0, 15);
+        longitude = clamp(longitude, 0, 15);
+        let r = (rgb >> 16) & 0xff;
+        let g = (rgb >> 8) & 0xff;
+        let b = (rgb) & 0xff;
+        let pixel = longitude * 16 + latitude;
+        fire().ledBuffer [pixel*3] = g;
+        fire().ledBuffer [pixel*3+1] = r; // yes, I know. Right?
+        fire().ledBuffer [pixel*3+2] = b;
+    }
+
+    /** get pixel at address lat/long
+     * Get LED color value.
+     * @param latitude latitudinal value 0-15
+     * @param longitude longitudinal value 0-15
+     */
+    //% blockId="GetPixel" block="get LED colour at lat%latitude|long%longitude"
+    //% subcategory="Latitude Longitude"
+    //% weight=95
+    //% blockGap=8
+    export function getPixel(latitude: number, longitude: number): number
+    {
+        latitude = clamp(latitude, 0, 15);
+        longitude = clamp(longitude, 0, 15);
+        let pixel = longitude * 16 + latitude;
+        let g = fire().ledBuffer[pixel*3];
+        let r = fire().ledBuffer[pixel*3+1];
+        let b = fire().ledBuffer[pixel*3+2];
+        return convertRGB(r,g,b);
+    }
+
+    /**
+     * Set circle to given colour
+     * @param latilong circle on longitude or latitude
+     * @param val position of circle 0-15
+     * @param rgb RGB color of the LED
+     */
+    //% blockId="SetLLCircleColor" block="set circle at %latilong|%val|to%rgb=FireColours"
+    //% subcategory="Latitude Longitude"
+    //% weight=90
+    //% blockGap=8
+    export function setLLCircleColor(latilong: LatLong, val: number, rgb: number)
+    {
+        val = clamp(val, 0, 15);
+        if (latilong == LatLong.Latitude)
+        {
+            for (let i=0; i<16; i++)
+                fire().setPixel(i*16 + val, rgb);
+        }
+        else
+        {
+            for (let i=0; i<16; i++)
+            {
+                fire().setPixel(val*16 + i, rgb);
+                fire().setPixel(((val+8)%16)*16 + i, rgb);
+            }
+        }
+        updateLEDs();
+    }
+
+    /* get rgb colour number for Rainbow */
+    function wheel(pos: number): number
+    {
+        /* Generate rainbow colors across 0-255 positions */
+        if (pos < 85)
+            return convertRGB(255 - pos * 3, pos * 3, 0); // Red -> Green
+        else if (pos < 170)
+        {
+            pos = pos - 85;
+            return convertRGB(0, 255 - pos * 3, pos * 3); // Green -> Blue
+        }
+        else
+        {
+            pos = pos - 170;
+            return convertRGB(pos * 3, 0, 255 - pos * 3); // Blue -> Red
+        }
+    }
+
+    /**
+     * Set rainbow LEDs in latitude or longitude. All circles same colour
+     * @param latilong select latitude or longitude to apply Rainbow to
+     * @param direction positive or negative direction Red to Blue, or vice versa
+     */
+    //% blockId="RainbowLatLong" block="set Rainbow in%latilong|%direction"
+    //% subcategory="Latitude Longitude"
+    //% weight=80
+    //% blockGap=8
+    export function rainbowLatLong(latilong: LatLong, direction: MoveDirection)
+    {
+        let rgb: number;
+        if (latilong == LatLong.Latitude)
+        {
+            for (let i=0; i<16; i++)
+            {
+                rgb = (direction == MoveDirection.Forward) ? wheel(i*16) : wheel(240-i*16)
+                for (let j=0; j<16; j++)
+                    fire().setPixel(j*16+i, rgb);
+            }
+        }
+        else
+        {
+            for (let i=0; i<16; i++)
+            {
+                rgb = (direction == MoveDirection.Forward) ? wheel(i*16) : wheel(240-i*16)
+                for (let j=0; j<16; j++)
+                    fire().setPixel(i*16+j, rgb);
+            }
+        }
+        updateLEDs();
+    }
+
+
+    // Rotate Leds in Latitude or Longitude (all Leds at latitude x move to x+1)
+    /**
+     * Rotate LEDs in latitude or longitude
+     * @param latilong select latitude or longitude to rotate
+     * @param direction positive or negative direction
+     */
+    //% blockId="RotateLatLong" block="rotate all LEDs in%latilong|%direction"
+    //% subcategory="Latitude Longitude"
+    //% weight=70
+    //% blockGap=8
+    export function rotateLatLong(latilong: LatLong, direction: MoveDirection)
+    {
+        let tBuf = pins.createBuffer(48);
+        if (latilong == LatLong.Latitude)
+        {
+            if (direction == MoveDirection.Forward)
+            {
+                let p = 45;
+                for (let t=0; t<48; t+=3)
+                {
+                    tBuf[t] = fire().ledBuffer[p];
+                    tBuf[t+1] = fire().ledBuffer[p+1];
+                    tBuf[t+2] = fire().ledBuffer[p+2];
+                    p += 48;
+                }
+                for (let i=15; i>0; i--)
+                    for (let j=0; j<16; j++)
+                    {
+                        let k = (j*16+i) * 3;
+                        fire().ledBuffer[k] = fire().ledBuffer[k-3];
+                        fire().ledBuffer[k+1] = fire().ledBuffer[k-2];
+                        fire().ledBuffer[k+2] = fire().ledBuffer[k-1];
+                    }
+                p = 0;
+                for (let t=0; t<48; t+=3)
+                {
+                    fire().ledBuffer[p] = tBuf[t];
+                    fire().ledBuffer[p+1] = tBuf[t+1];
+                    fire().ledBuffer[p+2] = tBuf[t+2];
+                    p += 48;
+                }
+            }
+            else  // Reverse
+            {
+                let p = 0;
+                for (let t=0; t<48; t+=3)
+                {
+                    tBuf[t] = fire().ledBuffer[p];
+                    tBuf[t+1] = fire().ledBuffer[p+1];
+                    tBuf[t+2] = fire().ledBuffer[p+2];
+                    p += 48;
+                }
+                for (let i=0; i<15; i++)
+                    for (let j=0; j<16; j++)
+                    {
+                        let k = (j*16+i) * 3;
+                        fire().ledBuffer[k] = fire().ledBuffer[k+3];
+                        fire().ledBuffer[k+1] = fire().ledBuffer[k+4];
+                        fire().ledBuffer[k+2] = fire().ledBuffer[k+5];
+                    }
+                p = 45;
+                for (let t=0; t<48; t+=3)
+                {
+                    fire().ledBuffer[p] = tBuf[t];
+                    fire().ledBuffer[p+1] = tBuf[t+1];
+                    fire().ledBuffer[p+2] = tBuf[t+2];
+                    p += 48;
+                }
+            }
+        }
+        else // rotate in longitude
+        {
+            let p = 240*3;
+            if (direction == MoveDirection.Forward)
+            {
+                for (let t=0; t<48; t++)
+                    tBuf[t] = fire().ledBuffer[t+p];
+                for (let i=15; i>0; i--)
+                    for (let j=0; j<48; j++)
+                        fire().ledBuffer[i*48+j] = fire().ledBuffer[i*48+j-48];
+                for (let t=0; t<48; t++)
+                    fire().ledBuffer[t] = tBuf[t];
+            }
+            else  // Reverse
+            {
+                for (let t=0; t<48; t++)
+                    tBuf[t] = fire().ledBuffer[t];
+                for (let i=0; i<15; i++)
+                    for (let j=0; j<48; j++)
+                        fire().ledBuffer[i*48+j] = fire().ledBuffer[i*48+j+48];
+                for (let t=0; t<48; t++)
+                    fire().ledBuffer[t+p] = tBuf[t];
+            }
+        }
+        updateLEDs();
+    }
+
+    function radiateXY(x0: number, y0: number, x: number, y: number)
+    {
+        let x1: number;
+        let y1: number;
+        let dx = x0 - x;
+        let dy = y0 - y;
+        let adx = Math.abs(dx);
+        let ady = Math.abs(dy);
+        if (dx == 0 && dy!=0)
+        {
+            x1 = x;
+            y1 = y + ((dy>0) ? 1 : -1);
+        }
+        else if (dy == 0 && dx!=0)
+        {
+            y1 = y;
+            x1 = x + ((dx>0) ? 1 : -1);
+        }
+        else if (adx == ady)
+        {
+            x1 = x + ((dx>0) ? 1 : -1);
+            y1 = y + ((dy>0) ? 1 : -1);
+        }
+        else if (adx > ady)
+        {
+            x1 = x + ((dx>0) ? 1 : -1);
+            y1 = Math.round(y + (dy * (adx -1) / adx));
+        }
+        else if (adx < ady)
+        {
+            y1 = y + ((dy>0) ? 1 : -1);
+            x1 = Math.round(x + (dx * (ady -1) / ady));
+        }
+        else
+        {
+            x1 = x;
+            y1 = y;
+        }
+        putPixel(x, y, getPixel(x1,y1));
+    }
+
+    /**
+     * Radiate LEDs from point in all directions. Stops at 0 or 15 on either axis
+     * @param x0 latitude of radiation centre
+     * @param y0 longitude of radiation centre
+     */
+    //% blockId="RadiateLatLong" block="radiate from lat%x0|long%y0"
+    //% subcategory="Latitude Longitude"
+    //% weight=60
+    //% blockGap=8
+    export function radiateLatLong(x0: number, y0: number)
+    {
+        let x1: number;
+        let y1: number;
+        let dx: number;
+        let dy: number;
+        for (let x=0; x<=x0; x++)
+            for (let y=0; y<=y0; y++)
+                radiateXY(x0, y0, x, y);
+        for (let x=15; x>x0; x--)
+            for (let y=0; y<=y0; y++)
+                radiateXY(x0, y0, x, y);
+        for (let x=0; x<=x0; x++)
+            for (let y=15; y>y0; y--)
+                radiateXY(x0, y0, x, y);
+        for (let x=15; x>x0; x--)
+            for (let y=15; y>y0; y--)
+                radiateXY(x0, y0, x, y);
+        updateLEDs();
+    }
+
+    /**
+     * Orbit the globe north to south, or vice versa
+     * Similar to rotate but moves up in lonigtudes 0 to 7, down from 8 to 15
+     * @param direction positive or negative direction
+     */
+    //% blockId="OrbitNorthSouth" block="orbit all LEDs%direction"
+    //% subcategory="Latitude Longitude"
+    //% weight=50
+    //% blockGap=8
+    export function orbitNorthSouth(direction: MoveDirection)
+    {
+        if (direction == MoveDirection.Forward)
+        {
+            for (let x=0; x<8; x++)
+            {
+                let t=getPixel(15, x);
+                for (let y=15; y>0; y--)
+                {
+                    putPixel(y, x, getPixel(y-1, x));
+                }
+                putPixel (0, x, getPixel(0, x+8));
+                for (let y=0; y<15; y++)
+                {
+                    putPixel(y, x+8, getPixel(y+1, x+8));
+                }
+                putPixel (15, x+8, t);
+            }
+        }
+        else
+        {
+            for (let x=0; x<8; x++)
+            {
+                let t=getPixel(15, x+8);
+                for (let y=15; y>0; y--)
+                {
+                    putPixel(y, x+8, getPixel(y-1, x+8));
+                }
+                putPixel (0, x+8, getPixel(0, x));
+                for (let y=0; y<15; y++)
+                {
+                    putPixel(y, x, getPixel(y+1, x));
+                }
+                putPixel (15, x, t);
+            }
+        }
+        updateLEDs();
     }
 
 }
