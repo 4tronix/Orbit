@@ -67,9 +67,10 @@ orbit.ledRotate();
 ```
 
 ## Latitude-Longitude Category
-Essentially this category treats the Fireleds as a 16 x 16 matrix. Latitude 0 is at the bottom and Latitude 15 is at the top. Longitude 0 is
-nearest the Microbit/Pi and longitude 15 is all the way round from there, so it is next to longitude 0.
-There are blocks to set individual Fireleds, set a ring of fire leds, or move Fireleds vertically ("in Latitude") or horizontally ("in Longitude").
+Essentially this category treats the Fireleds as a 16 x 16 matrix. Latitude 0 is at the bottom and Latitude 15 is at the top.
+Longitude 0 is nearest the Microbit/Pi and longitude 15 is all the way round from there, so it is next to longitude 0.
+There are blocks to set individual Fireleds, set a ring of fire leds, or move Fireleds vertically ("in Latitude") or
+horizontally ("in Longitude").
 ```blocks
 // Set individual Fireled to Blue at latitude 4 and longitude 7
 orbit.setLLPixelColor(4,7,0x0000ff);
@@ -88,6 +89,7 @@ orbit.rotateLatLong(LatLong.Longitude, MoveDirection.Forward);
 
 // Orbit all the LEDs vertically. LEDs travel up one segment and down the opposite segment
 orbit.orbitNorthSouth(MoveDirection.Forward);
+```
 
 ## Supported targets
 
