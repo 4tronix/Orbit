@@ -55,7 +55,7 @@ namespace orbit
         return band;
     }
 
-    // update FireLeds if updateMode set to Auto
+    // update FireLeds if updateMode set to Auto  
     function updateLEDs()
     {
         if (updateMode == ledMode.Auto)

@@ -1,6 +1,6 @@
 {
     "name": "Orbit",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "Microsoft MakeCode package for 4tronix Orbit RGB Sphere",
     "license": "MIT",
     "dependencies": {
