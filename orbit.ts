@@ -274,6 +274,7 @@ namespace orbit
     //% subcategory="Latitude Longitude"
     //% weight=95
     //% blockGap=8
+    //% deprecated=true
     export function putPixel(latitude: number, longitude: number, rgb: number)
     {
         latitude = clamp(latitude, 0, 15);
