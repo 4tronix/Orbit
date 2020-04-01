@@ -8,13 +8,13 @@ the bottom of the first segment and LED 255 being the top of the 16th segment.
 
 There are 3 categories within the Orbit package:
 
-###Generic
+* Generic
 Has standard LED control blocks, such as set/clear all LEDs, set the Brightness and select Manual or Automatic updates.
 
-###Single String
+* Single String
 Contains block to treat all the LEDs as one long string of LEDs, such as setting individual colours and shifting them.
 
-###Latitude Longitude
+* Latitude Longitude
 Includes blocks for setting and moving rings of colours sidways (Longitude) or vertically (Latitude), as well as
 using essentially X-Y addressing to set individual Fireleds.
 
@@ -60,9 +60,11 @@ orbit.setPixelColor(35, 0xff0000);
 // set all 256 Fireleds to rainbow colour wheel values. LED0 will be Red, through to LED 255 as violet
 orbit.ledRainbow();
 
-// Shift all the LEDs by one position. So LED1 will be same as LED0 was, LED2 will be same as LED1 was. LED0 will be set to blank
+// Shift all the LEDs by one position. So LED1 will be same as LED0 was, LED2 will be same as LED1 was.
+// LED0 will be set to blank
 orbit.ledShift();
-// Rotate all the LEDs by one position. This is the same as Shift, ecept that LED0 becomes the same as LED255 was previously
+// Rotate all the LEDs by one position. This is the same as Shift, ecept that LED0 becomes the same
+// as LED255 was previously
 orbit.ledRotate();
 ```
 
@@ -81,7 +83,8 @@ orbit.setLLCircle(LatLong.Latitude,4,0x00ff00);
 // Set a vertical ring/circle to Red at longitude 12
 orbit.setLLCircle(LatLong.Longitude,12,0xff0000);
 
-// Rotate all LEDs vertically. All LEDs move up (or down) one position and the bottom ring 0 take the previous values of the top ring
+// Rotate all LEDs vertically. All LEDs move up (or down) one position and the bottom ring 0 take the previous
+// values of the top ring
 orbit.rotateLatLong(LatLong.Latitude, MoveDirection.Forward);
 
 // Rotate all LEDs horizontally. LEDs travel around the Orbit continuously

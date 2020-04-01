@@ -1,11 +1,11 @@
 {
     "name": "Orbit",
-    "version": "0.1.2",
+    "version": "0.1.4",
     "description": "Microsoft MakeCode package for 4tronix Orbit Fireled Globe",
     "license": "MIT",
     "dependencies": {
         "core": "*",
-        "fireled": "github:4tronix/FireLedsBase"
+        "fireled": "github:4tronix/FireLedsBase#0.1.4"
     },
     "files": [
         "README.md",
