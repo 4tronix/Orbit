@@ -1,9 +1,9 @@
 # Makecode extension for 4tronix Orbit
 
-Helper routines for using the Fireleds in the Orbit RGB Globe https://4tronix.co.uk/orbit/.
+Helper routines for using the Fireleds in the 4tronix Orbit RGB Globe https://4tronix.co.uk/orbit/.
 
 ## General
-The Orbit contains 256 Fireleds arranged as 16 segmnts of 16 Fireleds each. This forms a band of 256 Fireleds, with LED 0 being
+The Orbit contains 256 Fireleds arranged as 16 segments of 16 Fireleds each. This forms a band of 256 Fireleds, with LED 0 being
 the bottom of the first segment and LED 255 being the top of the 16th segment.
 
 There are 3 categories within the Orbit package:
